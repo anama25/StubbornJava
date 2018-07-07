@@ -59,6 +59,12 @@ allprojects {
         }
     }
 
+    // Copy Dependencies
+    task copyToLib(type: Copy) {
+        into "$buildDir/docker/libs"
+        from configurations.runtime
+    }
+
     // Maven Publish Begin
     task sourceJar(type: Jar) {
         from sourceSets.main.allJava

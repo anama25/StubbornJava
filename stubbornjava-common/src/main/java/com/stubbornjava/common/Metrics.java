@@ -45,24 +45,8 @@ public class Metrics {
         metrics.start();
         root.addAppender(metrics);
 
-
-        // Graphite reporter to Grafana Cloud
-        OkHttpClient client = new OkHttpClient.Builder()
-            //.addNetworkInterceptor(HttpClient.getLoggingInterceptor())
-            .build();
-
-        String graphiteHost = Configs.properties().getString("metrics.graphite.host");
-        String grafanaApiKey = Configs.properties().getString("metrics.grafana.api_key");
-        final GraphiteHttpSender graphite = new GraphiteHttpSender(client, graphiteHost, grafanaApiKey);
-        final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                                                          .prefixedWith(metricPrefix("stubbornjava"))
-                                                          .convertRatesTo(TimeUnit.SECONDS)
-                                                          .convertDurationsTo(TimeUnit.MILLISECONDS)
-                                                          .filter(MetricFilter.ALL)
-                                                          .build(graphite);
-        reporter.start(10, TimeUnit.SECONDS);
-
         // Register reporters here.
+        startReporter();
     }
 
     public static MetricRegistry registry() {
@@ -97,6 +81,28 @@ public class Metrics {
 
     private static String getHost() {
         return EC2MetadataUtils.getLocalHostName().split("\\.")[0];
+    }
+
+    private static final void startReporter() {
+        try {
+            // Graphite reporter to Grafana Cloud
+            OkHttpClient client = new OkHttpClient.Builder()
+                //.addNetworkInterceptor(HttpClient.getLoggingInterceptor())
+                .build();
+
+            String graphiteHost = Configs.properties().getString("metrics.graphite.host");
+            String grafanaApiKey = Configs.properties().getString("metrics.grafana.api_key");
+            final GraphiteHttpSender graphite = new GraphiteHttpSender(client, graphiteHost, grafanaApiKey);
+            final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
+                                                              .prefixedWith(metricPrefix("stubbornjava"))
+                                                              .convertRatesTo(TimeUnit.SECONDS)
+                                                              .convertDurationsTo(TimeUnit.MILLISECONDS)
+                                                              .filter(MetricFilter.ALL)
+                                                              .build(graphite);
+            reporter.start(10, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            log.error("Failed to start GraphiteReporter", ex);
+        }
     }
 }
 // {{end:metrics}}

@@ -12,6 +12,13 @@ dependencies {
     testCompile libs.junit
 }
 
+// This copies the dependent jars into /libs
+build.finalizedBy(copyToLib)
+
+jar {
+    destinationDir = file("$buildDir/docker/libs")
+}
+
 shadowJar {
    baseName = 'stubbornjava-all'
    classifier = null
