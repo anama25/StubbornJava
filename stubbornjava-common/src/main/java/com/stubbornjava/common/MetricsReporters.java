@@ -26,7 +26,9 @@ class MetricsReporters {
                                                           .convertDurationsTo(TimeUnit.MILLISECONDS)
                                                           .filter(MetricFilter.ALL)
                                                           .build(graphite);
-        reporter.start(10, TimeUnit.SECONDS);
+
+        // Give an initial delay of 10 seconds to let the meters warm up a bit
+        reporter.start(10, 10, TimeUnit.SECONDS);
     }
 }
 // {{end:reporters}}
