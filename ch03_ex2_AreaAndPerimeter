@@ -1,0 +1,128 @@
+Rectangle.java is same:
+
+package murach.triangle;
+import java.text.NumberFormat;
+
+class Triangle{
+private double width;
+private double length;
+
+public Triangle()
+{
+length = 0;
+width = 0;
+}
+
+public triangle(double length, double width)
+{
+this.length = length;
+this.width = width;
+}
+  
+public double getLength() {
+return length;
+}
+
+public void setLength (double length) {
+this.length = length;
+}
+  
+public double getWidth() {
+return width;
+}
+
+public void setWidth (double width) {
+this.width = width;
+}
+  
+public double getArea(){
+double area = width*length;
+return area;
+}
+  
+  
+public String getAreaNumberFormat () {
+  
+NumberFormat number = NumberFormat.getNumberInstance();
+number.setMinimumFractionDigits (3);
+String numberFormatted = number.format(this.getArea());
+return numberFormatted;
+}
+  
+public double getPerimeter(){
+double perimeter = (2*width) + (2*length);
+return perimeter;
+}
+  
+public String getPerimeterNumberFormat(){
+NumberFormat number = NumberFormat.getNumberInstance();
+number.setMinimumFractionDigits (3);
+String numberFormatted = number.format(this.getPerimeter());
+return numberFormatted;
+}
+}
+
+Main class with modification:
+
+package murach.triangle;
+
+import java.util.Scanner;
+
+public class Main
+
+{
+
+public static void main(String[] args) {
+
+System.out.println("Welccme to the Area and Perimeter Calculator");
+
+System. out.println();
+
+Scanner sc = new Scanner (System.in);
+
+String choice = "y";
+
+while (choice.equalsIgnoreCase("y")) {
+
+System. out.print("Enter length and width: ");
+
+double[] values = new double[2];
+
+for(int i = 0; i < 2; i++)
+
+{
+
+values[i] = sc.nextDouble();
+
+}
+
+double length = values[0];
+
+double width = values[1];
+
+  
+
+Triangle r = new Triangle(length, width);
+
+System.out.println("Length:\t"+r.getLength());
+
+System.out.println("Width:\t"+r.getWidth());
+
+String message = "Area:\t" + r.getAreaNumberFormat() + "\n" + "Perimeter: " + r.getPerimeterNumberFormat() + "\n";
+
+System. out.println (message);
+
+System.out.print("Continue? (y/n): ");
+
+choice = sc.next();
+
+  
+
+}
+
+System. out.println("Bye!");
+
+}
+
+}
+
